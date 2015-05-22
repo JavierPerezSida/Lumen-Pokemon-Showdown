@@ -312,7 +312,6 @@ exports.grouplist = [
 		id: "operator",
 		name: "Operator",
 		inherit: '+',
-		joinbattle: true,
 		tournamentsmoderation: true,
 		tournaments: true,
 	},
@@ -320,6 +319,14 @@ exports.grouplist = [
 		symbol: '+',
 		id: "voice",
 		name: "Voice",
+		inherit: '$',
+		joinbattle: true,
+		broadcast: true
+	},
+	{
+		symbol: '$',
+		id: "destacado",
+		name: "Destacado",
 		inherit: ' ',
 		broadcast: true
 	},
