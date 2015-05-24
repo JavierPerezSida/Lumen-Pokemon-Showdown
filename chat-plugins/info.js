@@ -1928,8 +1928,25 @@ var commands = exports.commands = {
 	register: function () {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('You will be prompted to register upon winning a rated battle. Alternatively, there is a register button in the <button name="openOptions"><i class="icon-cog"></i> Options</button> menu in the upper right.');
-	},
-
+	}, 
+	
+	//Alianza Info Commands 
+	foro: function () {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox("<a href=\"http://alaianza.freeforums.net\">Foro de Alianza Server!</a>");
+	}, 
+	
+	afkhelp: function () {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox("<strong> Comandos de Afk : </strong><br />" +
+			  "/ausente o /afk <br />" + 
+                          "/ocupado <br />" + 
+			  "/comiendo <br />" +  
+			  "/aburrido <br />" + 
+                          "/durmiendo <br />" + 
+                          "/programando (Especialmente para los programadores del servidor).<br />" +  
+                          "<br />" );
+	}, 	
 	/*********************************************************
 	 * Miscellaneous commands
 	 *********************************************************/
