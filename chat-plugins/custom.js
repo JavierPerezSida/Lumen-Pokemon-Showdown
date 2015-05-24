@@ -1,4 +1,3 @@
-
 exports.commands = {
 	stafflist: 'authlist',
 	authlist: function (target, room, user, connection) {
