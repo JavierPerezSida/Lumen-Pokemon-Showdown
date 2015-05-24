@@ -90,7 +90,97 @@ exports.commands = {
 				Users.get(users[len]).joinRoom(room, Users.get(users[len]).connections[0]);
 			}
 		}, 1000);
+	}, 
+	
+	jugando: 'afk',
+        ocupado: 'afk',  
+	comiendo: 'afk', 
+        durmiendo: 'afk', 
+        programando: 'afk',
+	ausente: 'afk',
+	away: 'afk',
+	afk: function(target, room, user, connection, cmd) {
+		if (!this.canTalk) return false;
+		var t = 'Away';
+		switch (cmd) {
+			case 'jugando':
+			t = 'ⒿⓊⒼⒶⓃⒹⓄ';  
+			s = 'Jugando'
+			break;  
+                        case 'comiendo':
+			t = 'ⒸⓄⓂⒾⒺⓃⒹⓄ';
+			s = 'Comiendo'
+			break;			
+			case 'durmiendo':
+			t = 'ⒹⓊⓇⓂⒾⒺⓃⒹⓄ';
+			s = 'Durmiendo'
+			break; 
+			case 'programando':
+			t = 'ⓅⓇⓄⒼⓇⒶⓂⒶⓃⒹⓄ';
+			s = 'Programando'
+			break;
+			case 'ocupado':
+			t = 'ⓄⒸⓊⓅⒶⒹⓄ';
+			s = 'Ocupado'
+			break;
+			default:
+			t = 'ⒶⓊⓈⒺⓃⓉⒺ'
+			s = 'Ausente'
+			break;
+		}
+
+		if (!user.isAway) {
+			user.originalName = user.name;
+			var awayName = user.name + ' - '+t;
+			//delete the user object with the new name in case it exists - if it does it can cause issues with forceRename
+			delete Users.get(awayName);
+			user.forceRename(awayName, undefined, true);
+
+			if (user.isStaff) this.add('|raw|<b> <font color="#2EFEF7">' + Tools.escapeHTML(user.originalName) +'</font color></b> esta '+s.toLowerCase()+'. '+ (target ? " (" + escapeHTML(target) + ")" : ""));
+
+			user.isAway = true;
+			user.blockChallenges = true;
+		}
+		else {
+			return this.sendReply('Tu estas como ausente, digita /back.');
+		}
+
+		user.updateIdentity();
 	},
+
+	back: 'unafk',
+	regresar: 'unafk',
+	unafk: function(target, room, user, connection) {
+		if (!this.canTalk) return false;
+
+		if (user.isAway) {
+			if (user.name === user.originalName) {
+				user.isAway = false;
+				return this.sendReply('Tu nombre no ha cambiado y ya no estas ausente.');
+			}
+
+			var newName = user.originalName;
+
+			//delete the user object with the new name in case it exists - if it does it can cause issues with forceRename
+			delete Users.get(newName);
+
+			user.forceRename(newName, undefined, true);
+
+			//user will be authenticated
+			user.authenticated = true;
+
+			if (user.isStaff) this.add('|raw|<b> <font color="#2EFEF7">' + Tools.escapeHTML(newName) + '</font color></b> regreso.');
+
+			user.originalName = '';
+			user.isAway = false;
+			user.blockChallenges = false;
+		}
+		else {
+			return this.sendReply('Tu no estas ausente.');
+		}
+
+		user.updateIdentity();
+	}, 
 
 	roomlist: function (target, room, user) {
 		if (!this.can('roomlist')) return;
