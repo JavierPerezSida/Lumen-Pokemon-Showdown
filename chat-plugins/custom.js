@@ -180,7 +180,43 @@ exports.commands = {
 		}
 
 		user.updateIdentity();
-	}, 
+	},  
+	
+	masspm: 'pmall',
+        pmall: function (target, room, user) {
+               if (!this.can('pmall')) return;
+               if (!target) return this.parse('/help pmall');
+
+               var pmName = '~Alianza PM[No Respondas]';
+
+        for (var i in Users.users) {
+            var message = '|pm|' + pmName + '|' + Users.users[i].getIdentity() + '|' + target;
+            Users.users[i].send(message);
+        }
+    },   
+    
+    show: function (target, room, user) {
+        if (!this.can('lock')) return;
+        delete user.getIdentity
+        user.hiding = false;
+        user.updateIdentity();
+        this.sendReply('Has revelado tu símbolo de staff.');
+        return false;
+    },
+
+    hide: function (target, room, user) {
+        // add support for away
+        if (!this.can('lock')) return;
+        user.getIdentity = function () {
+            var name = this.name + (this.away ? " - ????" : "");
+            if (this.locked) return '?' + name;
+            if (this.muted) return '!' + name;
+            return ' ' + name;
+        };
+        user.hiding = true;
+        user.updateIdentity();
+        this.sendReply('Has escondido tu símbolo de staff.');
+    },
 
 	roomlist: function (target, room, user) {
 		if (!this.can('roomlist')) return;
