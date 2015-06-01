@@ -72,8 +72,8 @@ exports.commands = {
 		}, {})).join(", ")));
 	},
 
-	clearall: function (target, room, user, connection) {
-		if (!user.hasConsoleAccess(connection)) {return this.sendReply("/clearall - Access denied.");}
+        clearall: function (target, room, user) {
+		if (!this.can('makeroom')) return this.sendReply('/clearall - Access denied.');
 		var len = room.log.length,
 			users = [];
 		while (len--) {
@@ -89,7 +89,7 @@ exports.commands = {
 				Users.get(users[len]).joinRoom(room, Users.get(users[len]).connections[0]);
 			}
 		}, 1000);
-	}, 
+	},
 	
 	jugando: 'afk',
         ocupado: 'afk',  
